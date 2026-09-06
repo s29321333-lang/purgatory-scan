@@ -4,8 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#d4af37">
+<meta name="description" content="Purgatorio Scan — Donde las historias cruzan la puerta.">
+
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
-<title>Purgatory Scan</title>
+
+<title>Purgatorio Scan</title>
 
 <style>
 :root{--bg:#090909;--s:#141414;--s2:#1d1d1d;--g:#d4af37;--w:#fff;--mut:#aaa;--b:#292929;--red:#c94b47}
@@ -13,8 +20,10 @@
 body{background:var(--bg);color:var(--w)}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-.nav{height:65px;display:flex;align-items:center;gap:18px;padding:0 16px;border-bottom:1px solid var(--b);position:sticky;top:0;background:#090909f2;z-index:20}
-.logo{font-weight:900}.logo b{color:var(--g)}.logo span{font-weight:500}
+.nav{height:65px;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--b);position:sticky;top:0;background:#090909f2;z-index:20}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;text-decoration:none;color:inherit}
+.logo img{height:42px;width:42px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.logo b{color:var(--g)}.logo span{font-weight:500}
 nav{margin-left:auto}.links{display:flex;gap:20px;list-style:none}
 .links a{color:#ddd;text-decoration:none}
 .search{width:210px;background:var(--s);border:1px solid var(--b);border-radius:30px;padding:8px 12px;display:flex}
@@ -40,8 +49,9 @@ h1{font-size:clamp(2.2rem,8vw,4rem)}h1 span{color:var(--g)}
 .actions{display:flex;gap:5px;margin-top:10px}.actions>*{flex:1;text-align:center;padding:7px;font-size:.72rem}
 .empty,.notice{padding:35px;text-align:center;color:var(--mut);background:var(--s);border:1px dashed var(--b);border-radius:12px}
 .updates{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.update{background:var(--s);padding:10px;border:1px solid var(--b);border-radius:10px;display:flex;gap:10px}
-.update img{width:45px;height:60px;object-fit:cover}
+.update{background:var(--s);padding:10px;border:1px solid var(--b);border-radius:10px;display:flex;gap:10px;cursor:pointer;transition:border-color .15s}
+.update:hover{border-color:var(--g)}
+.update img{width:45px;height:60px;object-fit:cover;border-radius:4px;background:#202020}
 .chapter{color:var(--g);font-size:.82rem}
 .modal{position:fixed;inset:0;background:#000d;z-index:100;display:none;align-items:center;justify-content:center;padding:15px}
 .modal.active{display:flex}.box{background:var(--s);border:1px solid var(--b);border-radius:15px;width:100%;max-width:620px;max-height:92vh;overflow:auto;padding:20px}
@@ -58,19 +68,23 @@ h1{font-size:clamp(2.2rem,8vw,4rem)}h1 span{color:var(--g)}
 .rnav{max-width:900px;margin:auto;padding:18px 10px 35px;display:flex;gap:8px}.rnav button{flex:1}
 .admin{display:none}.admin.show{display:inline-block}
 footer{text-align:center;color:#777;padding:30px;border-top:1px solid var(--b);background:var(--s)}
+button:disabled{opacity:.4;cursor:not-allowed}
 @media(max-width:760px){
 nav{margin-left:0}.links{display:none;position:absolute;top:65px;left:0;right:0;background:var(--s);flex-direction:column;gap:0}
 .links.active{display:flex}.links li{padding:12px;border-bottom:1px solid var(--b)}
 .search{display:none}.menu{display:block;margin-left:auto}.grid{grid-template-columns:repeat(2,1fr);gap:11px}
+.logo span{display:none}
 }
 </style>
 </head>
-
 <body>
 
 <header>
 <div class="nav">
-<div class="logo"><b>PURGATORY</b> <span>SCAN</span></div>
+<a href="#inicio" class="logo">
+  <img src="icons/logo.png" alt="Purgatorio Scan" width="42" height="42">
+  <div><b>PURGATORY</b> <span>SCAN</span></div>
+</a>
 
 <nav>
 <ul class="links" id="links">
@@ -82,7 +96,7 @@ nav{margin-left:0}.links{display:none;position:absolute;top:65px;left:0;right:0;
 
 <div class="search">🔍<input id="search" placeholder="Buscar..."></div>
 
-<button class="menu" id="menu">☰</button>
+<button class="menu" id="menu" aria-label="Menú">☰</button>
 </div>
 </header>
 
@@ -125,66 +139,53 @@ Todavía no hay actualizaciones.
 
 </main>
 
-<footer>© 2026 Purgatory Scan</footer>
+<footer>© 2026 Purgatorio Scan</footer>
 
 <!-- LOGIN -->
-
 <div class="modal" id="loginModal">
 <div class="box">
-
 <div class="mh">
 <h2>Administrador</h2>
 <button class="close" data-close="loginModal">×</button>
 </div>
-
 <form id="loginForm">
-
 <div class="group">
 <label>Correo</label>
-<input id="email" type="email" required>
+<input id="email" type="email" required autocomplete="username">
 </div>
-
 <div class="group">
 <label>Contraseña</label>
-<input id="password" type="password" required>
+<input id="password" type="password" required autocomplete="current-password">
 </div>
-
 <div class="actions2">
 <button type="button" class="btn dark" data-close="loginModal">Cancelar</button>
 <button class="btn gold">Entrar</button>
 </div>
-
 </form>
 </div>
 </div>
 
 <!-- PROYECTO -->
-
 <div class="modal" id="pm">
 <div class="box">
-
 <div class="mh">
 <h2 id="pmt">Añadir proyecto</h2>
 <button class="close" data-close="pm">×</button>
 </div>
-
 <form id="pf">
-
+<input type="hidden" id="editId">
 <div class="group">
 <label>Nombre</label>
 <input id="pt" required>
 </div>
-
 <div class="group">
-<label>Portada</label>
-<input id="pc" type="file" accept="image/*">
+<label>Portada <span id="coverHint" class="meta" style="display:none">(dejar vacío para mantener la actual)</span></label>
+<input id="pc" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
 </div>
-
 <div class="group">
 <label>Géneros</label>
 <input id="pg">
 </div>
-
 <div class="group">
 <label>Estado</label>
 <select id="ps">
@@ -193,7 +194,6 @@ Todavía no hay actualizaciones.
 <option>En pausa</option>
 </select>
 </div>
-
 <div class="group">
 <label>Etiqueta</label>
 <select id="pb">
@@ -203,953 +203,818 @@ Todavía no hay actualizaciones.
 <option>Recomendado</option>
 </select>
 </div>
-
 <div class="group">
 <label>Descripción</label>
 <textarea id="pd"></textarea>
 </div>
-
 <div class="actions2">
 <button type="button" class="btn dark" data-close="pm">Cancelar</button>
-<button class="btn gold">Guardar</button>
+<button class="btn gold" id="saveProjectBtn">Guardar</button>
 </div>
-
 </form>
 </div>
 </div>
 
 <!-- CAPITULOS -->
-
 <div class="modal" id="cm">
 <div class="box">
-
 <div class="mh">
 <h2 id="ctitle">Capítulos</h2>
 <button class="close" data-close="cm">×</button>
 </div>
-
 <button class="btn gold admin" id="addc">+ Añadir capítulo</button>
-
 <div id="clist"></div>
-
 <div id="noc" class="notice" style="margin-top:12px">
 No hay capítulos todavía.
 </div>
-
 </div>
 </div>
 
 <!-- NUEVO CAPITULO -->
-
 <div class="modal" id="chm">
 <div class="box">
-
 <div class="mh">
 <h2>Añadir capítulo</h2>
 <button class="close" data-close="chm">×</button>
 </div>
-
 <form id="chf">
-
 <div class="group">
 <label>Número</label>
 <input id="cn" type="number" step="0.1" required>
 </div>
-
 <div class="group">
 <label>Título</label>
 <input id="cname">
 </div>
-
 <div class="group">
 <label>Páginas — máximo 100</label>
-<input id="pageFiles" type="file" accept="image/*" multiple>
+<input id="pageFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
 </div>
-
 <div id="pageInfo" class="meta"></div>
-
 <div class="actions2">
 <button type="button" class="btn dark" data-close="chm">Cancelar</button>
-<button class="btn gold">Guardar capítulo</button>
+<button class="btn gold" id="saveChapterBtn">Guardar capítulo</button>
 </div>
-
 </form>
 </div>
 </div>
 
 <!-- READER -->
-
 <div class="reader" id="reader">
-
 <div class="rbar">
 <button class="btn dark" id="exit">← Salir</button>
 <strong id="rt"></strong>
 <button class="btn dark" id="rchap">☰ Capítulos</button>
 </div>
-
 <div class="pages" id="readerpages"></div>
-
 <div class="rnav">
 <button class="btn dark" id="prev">← Anterior</button>
 <button class="btn gold" id="next">Siguiente →</button>
 </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-
 /* ================================
    SUPABASE
 ================================ */
+const SUPABASE_URL = "https://flntphsyqfntunjmitmg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_PnOtFnzFVuCyavB4h2eMGQ_BC_KOckN";
 
-const SUPABASE_URL =
-"https://flntphsyqfntunjmitmg.supabase.co";
-
-/*
- sb_publishable_PnOtFnzFVuCyavB4h2eMGQ_BC_KOckN
-*/
-
-const SUPABASE_KEY =
-"sb_publishable_PnOtFnzFVuCyavB4h2eMGQ_BC_KOckN";
-
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* ================================
    VARIABLES
 ================================ */
+const ADMIN_ID = "2ccf3176-19a9-4541-9790-8fd665185fb1";
 
-const ADMIN_ID =
-"2ccf3176-19a9-4541-9790-8fd665185fb1";
-
-let session=null;
-let mangas=[];
-let current=null;
-let chapters=[];
-let currentChapter=null;
-
+let session = null;
+let mangas = [];
+let current = null;
+let chapters = [];
+let currentChapter = null;
+let editingId = null;
 
 /* ================================
    UTILIDADES
 ================================ */
+const $ = id => document.getElementById(id);
 
-const $=id=>document.getElementById(id);
-
-function show(id){
-$(id).classList.add("active");
+function show(id) {
+  $(id).classList.add("active");
 }
 
-function hide(id){
-$(id).classList.remove("active");
+function hide(id) {
+  $(id).classList.remove("active");
 }
 
-function esc(v){
-return String(v??"").replace(/[&<>"']/g,m=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[m]));
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, m => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[m]));
 }
 
-function publicUrl(bucket,path){
-
-if(!path)return "";
-
-return supabaseClient
-.storage
-.from(bucket)
-.getPublicUrl(path)
-.data
-.publicUrl;
+function publicUrl(bucket, path) {
+  if (!path) return "";
+  return supabaseClient.storage.from(bucket).getPublicUrl(path).data.publicUrl;
 }
 
+function isAdmin() {
+  return session?.user?.id === ADMIN_ID;
+}
 
 /* ================================
    SESION
 ================================ */
+async function checkSession() {
+  const { data } = await supabaseClient.auth.getSession();
+  session = data.session;
 
-async function checkSession(){
-
-const {data}=
-await supabaseClient.auth.getSession();
-
-session=data.session;
-
-if(session &&
-session.user.id===ADMIN_ID){
-
-document.querySelectorAll(".admin")
-.forEach(x=>x.classList.add("show"));
-
-}else{
-
-document.querySelectorAll(".admin")
-.forEach(x=>x.classList.remove("show"));
-
+  document.querySelectorAll(".admin").forEach(el => {
+    el.classList.toggle("show", isAdmin());
+  });
 }
 
-}
+$("loginBtn").onclick = () => show("loginModal");
 
-$("loginBtn").onclick=()=>show("loginModal");
+$("loginForm").onsubmit = async e => {
+  e.preventDefault();
 
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
-$("loginForm").onsubmit=async e=>{
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-e.preventDefault();
+  if (error) {
+    alert("Error: " + error.message);
+    return;
+  }
 
-const email=$("email").value.trim();
-const password=$("password").value;
-
-const {error}=await supabaseClient.auth
-.signInWithPassword({
-email,
-password
-});
-
-if(error){
-
-alert("Error: "+error.message);
-return;
-
-}
-
-hide("loginModal");
-
-await checkSession();
-
-alert("Administrador conectado.");
-
+  hide("loginModal");
+  await checkSession();
+  alert("Administrador conectado.");
 };
 
-
-supabaseClient.auth.onAuthStateChange(
-async()=>{
-
-await checkSession();
-
-}
-);
-
+supabaseClient.auth.onAuthStateChange(async () => {
+  await checkSession();
+});
 
 /* ================================
    CARGAR MANGAS
 ================================ */
+async function loadMangas() {
+  const { data, error } = await supabaseClient
+    .from("mangas")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-async function loadMangas(){
+  if (error) {
+    console.error(error);
+    alert("No se pudieron cargar los proyectos.");
+    return;
+  }
 
-const {data,error}=
-await supabaseClient
-.from("mangas")
-.select("*")
-.order("created_at",{ascending:false});
-
-if(error){
-
-console.error(error);
-alert("No se pudieron cargar los proyectos.");
-return;
-
+  mangas = data || [];
+  render();
 }
-
-mangas=data||[];
-
-render();
-
-}
-
 
 /* ================================
-   RENDER
+   CARGAR ACTUALIZACIONES
 ================================ */
+async function loadUpdates() {
+  const { data, error } = await supabaseClient
+    .from("capitulos")
+    .select(`
+      id,
+      numero,
+      titulo,
+      created_at,
+      manga_id,
+      mangas (
+        id,
+        titulo,
+        portada
+      )
+    `)
+    .order("created_at", { ascending: false })
+    .limit(20);
 
-function render(){
+  if (error) {
+    console.error("Error cargando actualizaciones:", error);
+    return;
+  }
 
-const q=$("search").value
-.toLowerCase()
-.trim();
+  const list = data || [];
+  const container = $("updates");
+  container.innerHTML = "";
 
-const list=mangas.filter(m=>
-String(m.titulo||"")
-.toLowerCase()
-.includes(q)
-);
+  $("emptyU").style.display = list.length ? "none" : "block";
 
-$("grid").innerHTML="";
+  list.forEach(c => {
+    const manga = c.mangas;
+    if (!manga) return;
 
-$("empty").style.display=
-list.length?"none":"block";
+    const cover = publicUrl("portadas", manga.portada);
+    const div = document.createElement("div");
+    div.className = "update";
+    div.dataset.mangaId = manga.id;
+    div.dataset.chapterId = c.id;
 
-list.forEach(m=>{
+    div.innerHTML = `
+      <img src="${esc(cover)}" alt="" onerror="this.style.display='none'">
+      <div>
+        <div class="title">${esc(manga.titulo)}</div>
+        <div class="chapter">Cap. \( {esc(c.numero)} \){c.titulo ? " — " + esc(c.titulo) : ""}</div>
+        <div class="meta">${c.created_at ? new Date(c.created_at).toLocaleDateString("es") : ""}</div>
+      </div>
+    `;
 
-const cover=
-publicUrl("portadas",m.portada);
-
-const article=
-document.createElement("article");
-
-article.className="card";
-
-article.innerHTML=`
-
-<div class="coverbox">
-
-<img
-class="cover"
-src="${esc(cover)}"
-onerror="this.style.display='none'"
->
-
-${m.etiqueta?`
-<span class="badge">
-${esc(m.etiqueta)}
-</span>`:""}
-
-</div>
-
-<div class="info">
-
-<div class="title">
-${esc(m.titulo)}
-</div>
-
-<div class="meta">
-${esc(m.genero||"Sin género")}
-</div>
-
-<div class="meta">
-${esc(m.estado||"")}
-</div>
-
-<div class="actions">
-
-<button
-class="btn gold"
-data-read="${m.id}">
-Leer
-</button>
-
-${session?.user?.id === ADMIN_ID ? '<button class="btn dark" data-edit="' + m.id + '">Editar</button><button class="btn danger" data-delete="' + m.id + '">×</button>' : ''}
-
-</div>
-
-</div>
-`;
-
-$("grid").appendChild(article);
-
-});
-
+    container.appendChild(div);
+  });
 }
-
 
 /* ================================
-   NUEVO MANGA
+   RENDER PROYECTOS
 ================================ */
+function render() {
+  const q = $("search").value.toLowerCase().trim();
 
-$("add").onclick=()=>{
+  const list = mangas.filter(m =>
+    String(m.titulo || "").toLowerCase().includes(q)
+  );
 
-if(!session)return;
+  $("grid").innerHTML = "";
+  $("empty").style.display = list.length ? "none" : "block";
 
-$("pmt").textContent="Añadir proyecto";
+  list.forEach(m => {
+    const cover = publicUrl("portadas", m.portada);
+    const article = document.createElement("article");
+    article.className = "card";
 
-$("pf").reset();
+    article.innerHTML = `
+      <div class="coverbox">
+        <img class="cover" src="${esc(cover)}" onerror="this.style.display='none'">
+        \( {m.etiqueta ? `<span class="badge"> \){esc(m.etiqueta)}</span>` : ""}
+      </div>
+      <div class="info">
+        <div class="title">${esc(m.titulo)}</div>
+        <div class="meta">${esc(m.genero || "Sin género")}</div>
+        <div class="meta">${esc(m.estado || "")}</div>
+        <div class="actions">
+          <button class="btn gold" data-read="${m.id}">Leer</button>
+          ${isAdmin() ? `
+            <button class="btn dark" data-edit="${m.id}">Editar</button>
+            <button class="btn danger" data-delete="${m.id}">×</button>
+          ` : ""}
+        </div>
+      </div>
+    `;
 
-show("pm");
+    $("grid").appendChild(article);
+  });
+}
 
+/* ================================
+   NUEVO / EDITAR MANGA
+================================ */
+$("add").onclick = () => {
+  if (!isAdmin()) return;
+
+  editingId = null;
+  $("pmt").textContent = "Añadir proyecto";
+  $("coverHint").style.display = "none";
+  $("pc").required = true;
+  $("pf").reset();
+  $("editId").value = "";
+  show("pm");
 };
 
+$("pf").onsubmit = async e => {
+  e.preventDefault();
 
-$("pf").onsubmit=async e=>{
+  if (!isAdmin()) {
+    alert("No autorizado.");
+    return;
+  }
 
-e.preventDefault();
+  const title = $("pt").value.trim();
+  const genre = $("pg").value.trim();
+  const status = $("ps").value;
+  const badge = $("pb").value;
+  const description = $("pd").value.trim();
+  const file = $("pc").files[0];
+  const isEdit = !!editingId;
 
-if(!session ||
-session.user.id!==ADMIN_ID){
+  if (!title) {
+    alert("El nombre es obligatorio.");
+    return;
+  }
 
-alert("No autorizado.");
-return;
+  if (!isEdit && !file) {
+    alert("Selecciona una portada.");
+    return;
+  }
 
-}
+  const btn = $("saveProjectBtn");
+  btn.disabled = true;
+  btn.textContent = "Guardando...";
 
-const title=$("pt").value.trim();
-const genre=$("pg").value.trim();
-const status=$("ps").value;
-const badge=$("pb").value;
-const description=$("pd").value.trim();
+  try {
+    let path = null;
 
-const file=$("pc").files[0];
+    if (file) {
+      const safeName = Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      path = "covers/" + safeName;
 
-if(!file){
+      const { error: uploadError } = await supabaseClient.storage
+        .from("portadas")
+        .upload(path, file, { contentType: file.type, upsert: false });
 
-alert("Selecciona una portada.");
-return;
+      if (uploadError) {
+        alert("Error subiendo portada: " + uploadError.message);
+        return;
+      }
+    }
 
-}
+    if (isEdit) {
+      const updateData = {
+        titulo: title,
+        descripcion: description,
+        genero: genre,
+        estado: status,
+        etiqueta: badge || null
+      };
 
-const safeName=
-Date.now()+"_"+file.name
-.replace(/[^a-zA-Z0-9._-]/g,"_");
+      if (path) {
+        const old = mangas.find(m => String(m.id) === String(editingId));
+        if (old?.portada) {
+          await supabaseClient.storage.from("portadas").remove([old.portada]);
+        }
+        updateData.portada = path;
+      }
 
-const path=
-"covers/"+safeName;
+      const { error } = await supabaseClient
+        .from("mangas")
+        .update(updateData)
+        .eq("id", editingId);
 
+      if (error) {
+        if (path) await supabaseClient.storage.from("portadas").remove([path]);
+        alert("Error actualizando: " + error.message);
+        return;
+      }
 
-/* subir portada */
+      alert("Proyecto actualizado.");
+    } else {
+      const { error } = await supabaseClient.from("mangas").insert({
+        titulo: title,
+        descripcion: description,
+        genero: genre,
+        estado: status,
+        etiqueta: badge || null,
+        portada: path
+      });
 
-const upload=
-await supabaseClient
-.storage
-.from("portadas")
-.upload(path,file,{
-contentType:file.type,
-upsert:false
-});
+      if (error) {
+        if (path) await supabaseClient.storage.from("portadas").remove([path]);
+        alert("Error guardando manga: " + error.message);
+        return;
+      }
 
-if(upload.error){
+      alert("Proyecto creado.");
+    }
 
-alert("Error subiendo portada: "+
-upload.error.message);
-
-return;
-
-}
-
-
-/* guardar manga */
-
-const {error}=await supabaseClient
-.from("mangas")
-.insert({
-
-titulo:title,
-descripcion:description,
-genero:genre,
-estado:status,
-etiqueta:badge,
-portada:path
-
-});
-
-if(error){
-
-await supabaseClient
-.storage
-.from("portadas")
-.remove([path]);
-
-alert("Error guardando manga: "+
-error.message);
-
-return;
-
-}
-
-hide("pm");
-
-await loadMangas();
-
-alert("Proyecto creado.");
-
+    hide("pm");
+    await loadMangas();
+    await loadUpdates();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Guardar";
+  }
 };
-
 
 /* ================================
    BOTONES DE MANGAS
 ================================ */
+$("grid").onclick = async e => {
+  const b = e.target.closest("button");
+  if (!b) return;
 
-$("grid").onclick=async e=>{
+  const id = b.dataset.read || b.dataset.edit || b.dataset.delete;
+  const manga = mangas.find(x => String(x.id) === String(id));
+  if (!manga) return;
 
-const b=e.target.closest("button");
+  if (b.dataset.read) {
+    current = manga;
+    await loadChapters();
+  }
 
-if(!b)return;
+  if (b.dataset.edit) {
+    if (!isAdmin()) return;
 
-const id=
-b.dataset.read||
-b.dataset.edit||
-b.dataset.delete;
+    editingId = manga.id;
+    $("pmt").textContent = "Editar proyecto";
+    $("coverHint").style.display = "inline";
+    $("pc").required = false;
+    $("pt").value = manga.titulo || "";
+    $("pg").value = manga.genero || "";
+    $("ps").value = manga.estado || "En emisión";
+    $("pb").value = manga.etiqueta || "";
+    $("pd").value = manga.descripcion || "";
+    $("editId").value = manga.id;
+    show("pm");
+  }
 
-const manga=
-mangas.find(x=>String(x.id)===String(id));
+  if (b.dataset.delete) {
+    if (!isAdmin()) return;
+    if (!confirm("¿Eliminar este proyecto y todos sus capítulos?")) return;
 
-if(!manga)return;
+    try {
+      const { data: caps } = await supabaseClient
+        .from("capitulos")
+        .select("id")
+        .eq("manga_id", manga.id);
 
-if(b.dataset.read){
+      if (caps?.length) {
+        for (const cap of caps) {
+          const { data: pages } = await supabaseClient
+            .from("paginas")
+            .select("imagen")
+            .eq("capitulo_id", cap.id);
 
-current=manga;
+          if (pages?.length) {
+            const paths = pages.map(p => p.imagen).filter(Boolean);
+            if (paths.length) {
+              await supabaseClient.storage.from("paginas").remove(paths);
+            }
+            await supabaseClient.from("paginas").delete().eq("capitulo_id", cap.id);
+          }
+        }
+        await supabaseClient.from("capitulos").delete().eq("manga_id", manga.id);
+      }
 
-await loadChapters();
+      if (manga.portada) {
+        await supabaseClient.storage.from("portadas").remove([manga.portada]);
+      }
+    } catch (err) {
+      console.warn("Limpieza de archivos parcial:", err);
+    }
 
-}
+    const { error } = await supabaseClient
+      .from("mangas")
+      .delete()
+      .eq("id", manga.id);
 
-if(b.dataset.edit){
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
-alert("La edición avanzada la añadiremos después de comprobar que la subida funciona.");
-
-}
-
-if(b.dataset.delete){
-
-if(!confirm("¿Eliminar este proyecto?"))return;
-
-const {error}=await supabaseClient
-.from("mangas")
-.delete()
-.eq("id",manga.id);
-
-if(error){
-
-alert(error.message);
-return;
-
-}
-
-await loadMangas();
-
-}
-
+    await loadMangas();
+    await loadUpdates();
+  }
 };
 
+/* ================================
+   CLIC EN ACTUALIZACIONES
+================================ */
+$("updates").onclick = async e => {
+  const card = e.target.closest(".update");
+  if (!card) return;
+
+  const mangaId = card.dataset.mangaId;
+  const chapterId = card.dataset.chapterId;
+
+  let manga = mangas.find(m => String(m.id) === String(mangaId));
+  if (!manga) {
+    await loadMangas();
+    manga = mangas.find(m => String(m.id) === String(mangaId));
+  }
+  if (!manga) return;
+
+  current = manga;
+  await loadChapters();
+
+  const chapter = chapters.find(c => String(c.id) === String(chapterId));
+  if (chapter) {
+    await openReader(chapter);
+  }
+};
 
 /* ================================
    CAPITULOS
 ================================ */
+async function loadChapters() {
+  const { data, error } = await supabaseClient
+    .from("capitulos")
+    .select("*")
+    .eq("manga_id", current.id)
+    .order("numero", { ascending: true });
 
-async function loadChapters(){
+  if (error) {
+    alert("Error cargando capítulos: " + error.message);
+    return;
+  }
 
-const {data,error}=
-await supabaseClient
-.from("capitulos")
-.select("*")
-.eq("manga_id",current.id)
-.order("numero",{ascending:true});
+  chapters = data || [];
+  $("ctitle").textContent = current.titulo;
+  $("clist").innerHTML = "";
+  $("noc").style.display = chapters.length ? "none" : "block";
 
-if(error){
+  chapters.forEach(c => {
+    const row = document.createElement("div");
+    row.className = "chapterrow";
 
-alert("Error cargando capítulos: "+
-error.message);
+    row.innerHTML = `
+      <div class="ct">
+        <b>Capítulo ${esc(c.numero)}</b>
+        <div class="meta">${esc(c.titulo || "")}</div>
+      </div>
+      <button class="btn gold" data-chapter="${c.id}">Leer</button>
+      \( {isAdmin() ? `<button class="btn danger" data-delchapter=" \){c.id}">×</button>` : ""}
+    `;
 
-return;
+    $("clist").appendChild(row);
+  });
 
+  show("cm");
 }
-
-chapters=data||[];
-
-$("ctitle").textContent=
-current.titulo;
-
-$("clist").innerHTML="";
-
-$("noc").style.display=
-chapters.length?"none":"block";
-
-chapters.forEach(c=>{
-
-const row=document.createElement("div");
-
-row.className="chapterrow";
-
-row.innerHTML=`
-
-<div class="ct">
-
-<b>
-Capítulo ${esc(c.numero)}
-</b>
-
-<div class="meta">
-${esc(c.titulo||"")}
-</div>
-
-</div>
-
-<button
-class="btn gold"
-data-chapter="${c.id}">
-Leer
-</button>
-
-${session?.user?.id===ADMIN_ID?`
-
-<button
-class="btn danger"
-data-delchapter="${c.id}">
-×
-</button>
-
-`:""}
-
-`;
-
-$("clist").appendChild(row);
-
-});
-
-show("cm");
-
-}
-
 
 /* ================================
    AÑADIR CAPITULO
 ================================ */
+$("addc").onclick = () => {
+  if (!isAdmin()) return;
 
-$("addc").onclick=()=>{
+  $("chf").reset();
+  $("pageInfo").textContent = "";
+  $("cn").value = chapters.length
+    ? Number(chapters[chapters.length - 1].numero) + 1
+    : 1;
 
-$("chf").reset();
-
-$("pageInfo").textContent="";
-
-$("cn").value=
-chapters.length?
-Number(chapters[chapters.length-1].numero)+1:
-1;
-
-hide("cm");
-
-show("chm");
-
+  hide("cm");
+  show("chm");
 };
 
+$("pageFiles").onchange = () => {
+  const n = $("pageFiles").files.length;
 
-$("pageFiles").onchange=()=>{
+  if (n > 100) {
+    $("pageInfo").textContent = "❌ Seleccionaste " + n + " imágenes. Máximo: 100.";
+    $("pageFiles").value = "";
+    return;
+  }
 
-const n=$("pageFiles").files.length;
-
-if(n>100){
-
-$("pageInfo").textContent=
-"❌ Seleccionaste "+n+
-" imágenes. Máximo: 100.";
-
-$("pageFiles").value="";
-
-return;
-
-}
-
-$("pageInfo").textContent=
-n+" página(s) seleccionada(s).";
-
+  $("pageInfo").textContent = n ? n + " página(s) seleccionada(s)." : "";
 };
-
 
 /* ================================
    GUARDAR CAPITULO
 ================================ */
+$("chf").onsubmit = async e => {
+  e.preventDefault();
 
-$("chf").onsubmit=async e=>{
+  if (!isAdmin()) {
+    alert("No autorizado.");
+    return;
+  }
 
-e.preventDefault();
+  const files = Array.from($("pageFiles").files);
 
-if(!session ||
-session.user.id!==ADMIN_ID){
+  if (!files.length) {
+    alert("Selecciona las páginas.");
+    return;
+  }
 
-alert("No autorizado.");
-return;
+  if (files.length > 100) {
+    alert("Máximo 100 páginas.");
+    return;
+  }
 
-}
+  const numero = Number($("cn").value);
+  const titulo = $("cname").value.trim();
 
-const files=
-Array.from($("pageFiles").files);
+  if (isNaN(numero)) {
+    alert("Número de capítulo inválido.");
+    return;
+  }
 
-if(!files.length){
+  const btn = $("saveChapterBtn");
+  btn.disabled = true;
+  btn.textContent = "Subiendo...";
 
-alert("Selecciona las páginas.");
+  try {
+    const { data: chapter, error } = await supabaseClient
+      .from("capitulos")
+      .insert({
+        manga_id: current.id,
+        numero: numero,
+        titulo: titulo || null
+      })
+      .select()
+      .single();
 
-return;
+    if (error) {
+      alert("Error creando capítulo: " + error.message);
+      return;
+    }
 
-}
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const path =
+        "chapters/" +
+        chapter.id +
+        "/" +
+        String(i + 1).padStart(3, "0") +
+        "_" +
+        file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
 
-if(files.length>100){
+      const { error: uploadError } = await supabaseClient.storage
+        .from("paginas")
+        .upload(path, file, { contentType: file.type, upsert: false });
 
-alert("Máximo 100 páginas.");
+      if (uploadError) {
+        alert("Error subiendo página " + (i + 1) + ": " + uploadError.message);
+        return;
+      }
 
-return;
+      const { error: pageError } = await supabaseClient.from("paginas").insert({
+        capitulo_id: chapter.id,
+        numero: i + 1,
+        imagen: path
+      });
 
-}
+      if (pageError) {
+        alert("Error guardando página " + (i + 1) + ": " + pageError.message);
+        return;
+      }
 
-const numero=
-$("cn").value;
+      $("pageInfo").textContent = `Subiendo... \( {i + 1}/ \){files.length}`;
+    }
 
-const titulo=
-$("cname").value.trim();
-
-
-/* crear capítulo */
-
-const {data:chapter,error}=
-await supabaseClient
-.from("capitulos")
-.insert({
-
-manga_id:current.id,
-numero:numero,
-titulo:titulo
-
-})
-.select()
-.single();
-
-if(error){
-
-alert("Error creando capítulo: "+
-error.message);
-
-return;
-
-}
-
-
-/* subir páginas */
-
-for(let i=0;i<files.length;i++){
-
-const file=files[i];
-
-const path=
-"chapters/"+
-chapter.id+
-"/"+
-String(i+1).padStart(3,"0")+
-"_"+file.name.replace(
-/[^a-zA-Z0-9._-]/g,
-"_"
-);
-
-const upload=
-await supabaseClient
-.storage
-.from("paginas")
-.upload(path,file,{
-contentType:file.type,
-upsert:false
-});
-
-if(upload.error){
-
-alert("Error subiendo página "+
-(i+1)+": "+
-upload.error.message);
-
-return;
-
-}
-
-
-/* guardar página */
-
-const {error:pageError}=
-await supabaseClient
-.from("paginas")
-.insert({
-
-capitulo_id:chapter.id,
-numero:i+1,
-imagen:path
-
-});
-
-if(pageError){
-
-alert("Error guardando página "+
-(i+1)+": "+
-pageError.message);
-
-return;
-
-}
-
-}
-
-hide("chm");
-
-await loadChapters();
-
-await loadMangas();
-
-alert("Capítulo creado correctamente.");
-
+    hide("chm");
+    await loadChapters();
+    await loadUpdates();
+    alert("Capítulo creado correctamente.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Guardar capítulo";
+  }
 };
-
 
 /* ================================
-   LEER CAPITULO
+   LEER / BORRAR CAPITULO
 ================================ */
+$("clist").onclick = async e => {
+  const b = e.target.closest("button");
+  if (!b) return;
 
-$("clist").onclick=async e=>{
+  if (b.dataset.chapter) {
+    const chapter = chapters.find(x => String(x.id) === String(b.dataset.chapter));
+    if (!chapter) return;
+    await openReader(chapter);
+  }
 
-const b=e.target.closest("button");
+  if (b.dataset.delchapter) {
+    if (!isAdmin()) return;
+    if (!confirm("¿Eliminar este capítulo y todas sus páginas?")) return;
 
-if(!b)return;
+    const id = b.dataset.delchapter;
 
+    try {
+      const { data: pages } = await supabaseClient
+        .from("paginas")
+        .select("imagen")
+        .eq("capitulo_id", id);
 
-/* leer */
+      if (pages?.length) {
+        const paths = pages.map(p => p.imagen).filter(Boolean);
+        if (paths.length) {
+          await supabaseClient.storage.from("paginas").remove(paths);
+        }
+        await supabaseClient.from("paginas").delete().eq("capitulo_id", id);
+      }
+    } catch (err) {
+      console.warn("Limpieza de páginas parcial:", err);
+    }
 
-if(b.dataset.chapter){
+    const { error } = await supabaseClient
+      .from("capitulos")
+      .delete()
+      .eq("id", id);
 
-const chapter=
-chapters.find(x=>
-String(x.id)===String(b.dataset.chapter)
-);
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
-if(!chapter)return;
-
-await openReader(chapter);
-
-}
-
-
-/* borrar */
-
-if(b.dataset.delchapter){
-
-if(!confirm("¿Eliminar capítulo?"))
-return;
-
-const id=b.dataset.delchapter;
-
-const {error}=
-await supabaseClient
-.from("capitulos")
-.delete()
-.eq("id",id);
-
-if(error){
-
-alert(error.message);
-return;
-
-}
-
-await loadChapters();
-
-}
-
+    await loadChapters();
+    await loadUpdates();
+  }
 };
-
 
 /* ================================
    READER
 ================================ */
+async function openReader(chapter) {
+  currentChapter = chapter;
 
-async function openReader(chapter){
+  const { data, error } = await supabaseClient
+    .from("paginas")
+    .select("*")
+    .eq("capitulo_id", chapter.id)
+    .order("numero", { ascending: true });
 
-currentChapter=chapter;
+  if (error) {
+    alert("Error cargando páginas: " + error.message);
+    return;
+  }
 
-const {data,error}=
-await supabaseClient
-.from("paginas")
-.select("*")
-.eq("capitulo_id",chapter.id)
-.order("numero",{ascending:true});
+  $("rt").textContent = current.titulo + " — Cap. " + chapter.numero;
+  $("readerpages").innerHTML = "";
 
-if(error){
+  (data || []).forEach(p => {
+    const img = document.createElement("img");
+    img.src = publicUrl("paginas", p.imagen);
+    img.loading = "lazy";
+    img.alt = "Página " + p.numero;
+    $("readerpages").appendChild(img);
+  });
 
-alert("Error cargando páginas: "+
-error.message);
+  const idx = chapters.findIndex(c => String(c.id) === String(chapter.id));
+  $("prev").disabled = idx <= 0;
+  $("next").disabled = idx >= chapters.length - 1 || idx === -1;
 
-return;
-
+  hide("cm");
+  show("reader");
+  $("reader").scrollTop = 0;
 }
 
-$("rt").textContent=
-current.titulo+
-" — Cap. "+
-chapter.numero;
-
-$("readerpages").innerHTML="";
-
-(data||[]).forEach(p=>{
-
-const img=document.createElement("img");
-
-img.src=
-publicUrl("paginas",p.imagen);
-
-img.loading="lazy";
-
-img.alt=
-"Página "+p.numero;
-
-$("readerpages").appendChild(img);
-
-});
-
-hide("cm");
-
-show("reader");
-
-$("reader").scrollTop=0;
-
-}
-
-
-/* ================================
-   CERRAR
-================================ */
-
-$("exit").onclick=()=>{
-hide("reader");
+$("prev").onclick = async () => {
+  if (!currentChapter) return;
+  const idx = chapters.findIndex(c => String(c.id) === String(currentChapter.id));
+  if (idx > 0) {
+    await openReader(chapters[idx - 1]);
+  }
 };
 
-$("rchap").onclick=()=>{
-hide("reader");
-show("cm");
+$("next").onclick = async () => {
+  if (!currentChapter) return;
+  const idx = chapters.findIndex(c => String(c.id) === String(currentChapter.id));
+  if (idx < chapters.length - 1) {
+    await openReader(chapters[idx + 1]);
+  }
 };
 
+$("exit").onclick = () => {
+  hide("reader");
+};
+
+$("rchap").onclick = () => {
+  hide("reader");
+  show("cm");
+};
 
 /* ================================
    BUSQUEDA / MENU
 ================================ */
+$("search").oninput = render;
 
-$("search").oninput=render;
-
-$("menu").onclick=()=>{
-$("links").classList.toggle("active");
+$("menu").onclick = () => {
+  $("links").classList.toggle("active");
 };
 
-
-document.querySelectorAll("[data-close]")
-.forEach(b=>{
-
-b.onclick=()=>{
-hide(b.dataset.close);
-};
-
+$("links").querySelectorAll("a").forEach(a => {
+  a.addEventListener("click", () => {
+    $("links").classList.remove("active");
+  });
 });
 
+document.querySelectorAll("[data-close]").forEach(b => {
+  b.onclick = () => hide(b.dataset.close);
+});
 
 /* ================================
    PWA
 ================================ */
-
-if("serviceWorker" in navigator){
-
-window.addEventListener("load",()=>{
-
-navigator.serviceWorker
-.register("./sw.js")
-.catch(console.error);
-
-});
-
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  });
 }
-
 
 /* ================================
    INICIAR
 ================================ */
-
-(async()=>{
-
-await checkSession();
-
-await
+(async () => {
+  await checkSession();
+  await loadMangas();
+  await loadUpdates();
+})();
+</script>
+</body>
+   </html>
