@@ -536,21 +536,7 @@ data-read="${m.id}">
 Leer
 </button>
 
-${session?.user?.id===ADMIN_ID?`
-
-<button
-class="btn dark"
-data-edit="${m.id}">
-Editar
-</button>
-
-<button
-class="btn danger"
-data-delete="${m.id}">
-×
-</button>
-
-`:""}
+${session?.user?.id === ADMIN_ID ? '<button class="btn dark" data-edit="' + m.id + '">Editar</button><button class="btn danger" data-delete="' + m.id + '">×</button>' : ''}
 
 </div>
 
