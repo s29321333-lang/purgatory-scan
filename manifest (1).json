@@ -1,0 +1,12 @@
+{
+  "name": "Purgatory Scan",
+  "short_name": "Purgatory Scan",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#d4af37",
+  "description": "Donde las historias cruzan la puerta",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
