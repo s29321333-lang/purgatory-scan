@@ -1,17 +1,47 @@
-from pathlib import Path
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe9a0"/>
+      <stop offset="45%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#8a6a12"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
 
-svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#000000"/>
-  <path d="M128 432V120c0-22 18-40 40-40h176c22 0 40 18 40 40v312"
-        fill="none" stroke="#d4af37" stroke-width="24" stroke-linejoin="round"/>
-  <path d="M176 432V144c0-9 7-16 16-16h128c9 0 16 7 16 16v288"
-        fill="#0b0b0b" stroke="#ffffff" stroke-width="10"/>
-  <path d="M256 128v304" stroke="#d4af37" stroke-width="8"/>
-  <path d="M230 180h48c44 0 66 24 66 60s-22 60-66 60h-20v76h-28V180zm28 24v72h19c25 0 39-12 39-36s-14-36-39-36h-19z"
-        fill="#d4af37"/>
-  <path d="M96 432h320" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
-</svg>'''
+  <!-- Fondo negro -->
+  <rect width="1000" height="1000" fill="#050505"/>
 
-path = Path("/mnt/data/icon.svg")
-path.write_text(svg, encoding="utf-8")
-print(f"Created: {path}")
+  <!-- Círculo dorado -->
+  <circle cx="500" cy="500" r="460" fill="none" stroke="url(#gold)" stroke-width="14"/>
+  <circle cx="500" cy="500" r="440" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.5"/>
+
+  <!-- PURGATORIO -->
+  <text x="500" y="460" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="92" font-weight="bold"
+        fill="url(#gold)"
+        letter-spacing="6"
+        filter="url(#glow)">
+    PURGATORIO
+  </text>
+
+  <!-- Línea decorativa -->
+  <line x1="220" y1="510" x2="780" y2="510" stroke="#d4af37" stroke-width="2.5"/>
+  <circle cx="500" cy="510" r="5" fill="#d4af37"/>
+
+  <!-- SCAN -->
+  <text x="500" y="600" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="72" font-weight="bold"
+        fill="#e8c547"
+        letter-spacing="18">
+    SCAN
+  </text>
+</svg>
