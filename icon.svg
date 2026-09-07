@@ -1,6 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="96" fill="#050505"/>
-<path d="M116 112h280v288H116z" fill="none" stroke="#d4af37" stroke-width="24"/>
-<path d="M160 160h192v192H160z" fill="#111" stroke="#fff" stroke-width="12"/>
-<path d="M205 214h102M205 258h102M205 302h70" stroke="#d4af37" stroke-width="16" stroke-linecap="round"/>
-</svg>
+from pathlib import Path
+
+svg = '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#000000"/>
+  <path d="M128 432V120c0-22 18-40 40-40h176c22 0 40 18 40 40v312"
+        fill="none" stroke="#d4af37" stroke-width="24" stroke-linejoin="round"/>
+  <path d="M176 432V144c0-9 7-16 16-16h128c9 0 16 7 16 16v288"
+        fill="#0b0b0b" stroke="#ffffff" stroke-width="10"/>
+  <path d="M256 128v304" stroke="#d4af37" stroke-width="8"/>
+  <path d="M230 180h48c44 0 66 24 66 60s-22 60-66 60h-20v76h-28V180zm28 24v72h19c25 0 39-12 39-36s-14-36-39-36h-19z"
+        fill="#d4af37"/>
+  <path d="M96 432h320" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+</svg>'''
+
+path = Path("/mnt/data/icon.svg")
+path.write_text(svg, encoding="utf-8")
+print(f"Created: {path}")
