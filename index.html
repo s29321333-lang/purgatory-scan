@@ -233,7 +233,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(5,5,5,.96);border-bottom
     if(!title){toast("Escribe el título.");return;}
     try{
       let portada=null;
-      if(file){portada=await uploadFile(BUCKET_COVERS,"covers/"+uid()+"_"+safeName(file.name),file);}
+      if(file){portada=await uploadFile(BUCKET_COVERS,"creators/"+uid()+"/covers/"+safeName(file.name),file);}
       const payload={titulo:title,descripcion:description,genero:genre,estado:status,etiqueta:badge};
       if(portada)payload.portada=portada;
       if(id){const {error}=await sb.from(TABLE_MANGAS).update(payload).eq("id",id);if(error)throw error;toast("Manga actualizado.");}
