@@ -256,7 +256,7 @@ header{position:sticky;top:0;z-index:20;background:rgba(5,5,5,.96);border-bottom
         if(id && oldPages && oldPages.length){const {error:delErr}=await sb.from(TABLE_PAGES).delete().eq("capitulo_id",chapterId);if(delErr)throw delErr;}
         const rows=[];
         for(let i=0;i<files.length;i++){
-          const path="chapters/"+chapterId+"/"+String(i+1).padStart(3,"0")+"_"+safeName(files[i].name);
+          const path="creators/"+uid()+"/chapters/"+chapterId+"/"+String(i+1).padStart(3,"0")+"_"+safeName(files[i].name);
           await uploadFile(BUCKET_PAGES,path,files[i]); rows.push({capitulo_id:chapterId,numero:i+1,imagen:path});
         }
         const {error:pageErr}=await sb.from(TABLE_PAGES).insert(rows);if(pageErr)throw pageErr;
